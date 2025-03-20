@@ -18,7 +18,8 @@
       line-height: 1.6;
       background-color: #f8f9fa;
       color: #2c3e50;
-      padding: 20px;
+      padding: 30px;
+      min-height: 100vh;
     }
 
     .container {
@@ -28,56 +29,59 @@
     }
 
     .chart-container {
-      height: 500px;
-      margin-bottom: 40px;
+      height: 450px;
+      margin-bottom: 50px;
       background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      transition: all 0.3s ease;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s ease-out;
     }
 
     .chart-container:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
     h2 {
       text-align: center;
       font-family: 'Segoe UI', Arial, sans-serif;
       margin-bottom: 40px;
-      margin-top: 30px;
+      margin-top: 20px;
       color: #1a73e8;
-      font-size: 2em;
+      font-size: 2.2em;
       font-weight: 600;
+      letter-spacing: -0.5px;
     }
 
     .summary {
       margin: 40px auto;
-      padding: 25px 35px;
-      max-width: 800px;
-      background: linear-gradient(to right bottom, #ffffff, #f8f9fa);
-      border-radius: 12px;
+      padding: 30px 40px;
+      max-width: 900px;
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+      border-radius: 16px;
       line-height: 1.8;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border: 1px solid rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.03);
+      transition: box-shadow 0.2s ease-out;
+      font-size: 1.05em;
+      color: #37474f;
     }
 
     .summary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
     .summary strong {
       color: #1a73e8;
-      font-size: 1.1em;
+      font-size: 1.15em;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      letter-spacing: -0.3px;
     }
 
     @media (max-width: 768px) {
       body {
-        padding: 10px;
+        padding: 15px;
       }
 
       .container {
@@ -86,12 +90,38 @@
 
       .chart-container {
         height: 400px;
-        margin-bottom: 30px;
-        padding: 10px;
+        margin-bottom: 35px;
+        padding: 15px;
+        border-radius: 12px;
       }
 
       h2 {
-        font-size: 1.5em;
+        font-size: 1.6em;
+        margin: 25px 0;
+        padding: 0 15px;
+      }
+
+      .summary {
+        padding: 25px;
+        margin: 25px auto;
+        font-size: 0.95em;
+        border-radius: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .chart-container {
+        height: 300px;
+        margin-bottom: 25px;
+        padding: 12px;
+      }
+
+      h2 {
+        font-size: 1.3em;
         margin: 20px 0;
       }
 
@@ -100,15 +130,9 @@
         margin: 20px auto;
         font-size: 0.9em;
       }
-    }
 
-    @media (max-width: 480px) {
-      .chart-container {
-        height: 300px;
-      }
-
-      h2 {
-        font-size: 1.2em;
+      .summary strong {
+        font-size: 1.1em;
       }
     }
   </style>
@@ -127,11 +151,41 @@
 
   <script>
     // Data
-    const months = ["一月-24", "二月-24", "三月-24", "四月-24", "五月-24", "六月-24", "七月-24", 
-                    "八月-24", "九月-24", "十月-24", "十一月-24", "十二月-24", "一月-25", "二月-25"];
+    const months = ["01-24", "02-24", "03-24", "04-24", "05-24", "06-24", "07-24", 
+                    "08-24", "09-24", "10-24", "11-24", "12-24", "01-25", "02-25"];
     const totals = [3713, 3305, 3598, 2802, 2147, 1784, 1449, 1339, 1426, 1326, 1396, 1609, 1705, 2099];
     const toray = [2299, 2083, 1939, 1199, 767, 608, 430, 434, 492, 352, 436, 490, 703, 1099];
     const others = [1414, 1222, 1659, 1603, 1380, 1176, 1019, 905, 934, 974, 960, 1119, 1002, 1000];
+
+    // Common layout settings
+    const commonLayout = {
+      xaxis: {
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0',
+        fixedrange: true,
+        showgrid: false
+      },
+      yaxis: {
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0',
+        fixedrange: true,
+        showgrid: true
+      },
+      plot_bgcolor: 'white',
+      paper_bgcolor: 'white',
+      hovermode: 'x unified',
+      hoverlabel: {
+        bgcolor: 'white',
+        bordercolor: '#ddd',
+        font: { size: 13 }
+      }
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: false,
+      scrollZoom: false
+    };
 
     // Chart 1: Total values line chart
     const trace1 = {
@@ -156,25 +210,18 @@
     };
 
     const layout1 = {
+      ...commonLayout,
       title: {
         text: '库存金额趋势',
         font: { 
-          size: 18,
+          size: 20,
           color: '#2c3e50',
-          family: "'Segoe UI', Arial, sans-serif"
-        }
+          family: "'Segoe UI', Arial, sans-serif",
+          weight: 600
+        },
+        y: 0.95
       },
-      margin: { t: 40, r: 20, l: 50, b: 30 },
-      xaxis: {
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
-      yaxis: {
-        title: '库存金额（万）',
-        titlefont: { size: 11 },
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
+      margin: { t: 50, r: 30, l: 50, b: 30 },
       legend: {
         x: 0.02,
         y: 0.98,
@@ -183,17 +230,8 @@
         bgcolor: 'rgba(255, 255, 255, 0.9)',
         bordercolor: 'rgba(0, 0, 0, 0.1)',
         borderwidth: 1,
-        font: { size: 11 }
-      },
-      plot_bgcolor: 'white',
-      paper_bgcolor: 'white',
-      hovermode: 'x unified'
-    };
-
-    const config = {
-      responsive: true,
-      displayModeBar: false,
-      scrollZoom: false
+        font: { size: 12 }
+      }
     };
 
     Plotly.newPlot('chart1', [trace1], layout1, config);
@@ -206,35 +244,26 @@
       name: 'Toray',
       marker: {
         color: '#1a73e8',
-        opacity: 0.8
-      }
+        opacity: 0.85
+      },
+      hovertemplate: '%{y:,.0f}万<extra></extra>'
     };
 
     const layout2 = {
+      ...commonLayout,
       title: {
         text: 'Toray 库存金额',
         font: { 
-          size: 18,
+          size: 20,
           color: '#2c3e50',
-          family: "'Segoe UI', Arial, sans-serif"
-        }
+          family: "'Segoe UI', Arial, sans-serif",
+          weight: 600
+        },
+        y: 0.95
       },
-      margin: { t: 40, r: 20, l: 50, b: 30 },
-      xaxis: {
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
-      yaxis: {
-        title: '库存金额（万）',
-        titlefont: { size: 11 },
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
-      bargap: 0.3,
-      showlegend: false,
-      plot_bgcolor: 'white',
-      paper_bgcolor: 'white',
-      hovermode: 'x unified'
+      margin: { t: 50, r: 30, l: 50, b: 30 },
+      bargap: 0.4,
+      showlegend: false
     };
 
     Plotly.newPlot('chart2', [trace2a], layout2, config);
@@ -247,35 +276,26 @@
       name: '其他',
       marker: {
         color: '#34a853',
-        opacity: 0.8
-      }
+        opacity: 0.85
+      },
+      hovertemplate: '%{y:,.0f}万<extra></extra>'
     };
 
     const layout2b = {
+      ...commonLayout,
       title: {
         text: '其他公司库存金额',
         font: { 
-          size: 18,
+          size: 20,
           color: '#2c3e50',
-          family: "'Segoe UI', Arial, sans-serif"
-        }
+          family: "'Segoe UI', Arial, sans-serif",
+          weight: 600
+        },
+        y: 0.95
       },
-      margin: { t: 40, r: 20, l: 50, b: 30 },
-      xaxis: {
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
-      yaxis: {
-        title: '库存金额（万）',
-        titlefont: { size: 11 },
-        tickfont: { size: 11 },
-        gridcolor: '#f0f0f0'
-      },
-      bargap: 0.3,
-      showlegend: false,
-      plot_bgcolor: 'white',
-      paper_bgcolor: 'white',
-      hovermode: 'x unified'
+      margin: { t: 50, r: 30, l: 50, b: 30 },
+      bargap: 0.4,
+      showlegend: false
     };
 
     Plotly.newPlot('chart3', [trace2b], layout2b, config);
@@ -299,7 +319,8 @@
           color: '#ffffff',
           width: 2
         }
-      }
+      },
+      hovertemplate: '%{y:,.0f}万<extra></extra>'
     };
 
     const trace4b = {
@@ -320,7 +341,8 @@
           color: '#ffffff',
           width: 2
         }
-      }
+      },
+      hovertemplate: '%{y:,.0f}万<extra></extra>'
     };
 
     const trace4c = {
@@ -341,42 +363,33 @@
           color: '#ffffff',
           width: 2
         }
-      }
+      },
+      hovertemplate: '%{y:,.0f}万<extra></extra>'
     };
 
     const layout4 = {
+      ...commonLayout,
       title: {
         text: '详细对比趋势',
         font: { 
-          size: 18,
+          size: 20,
           color: '#2c3e50',
-          family: "'Segoe UI', Arial, sans-serif"
-        }
+          family: "'Segoe UI', Arial, sans-serif",
+          weight: 600
+        },
+        y: 0.95
       },
-      margin: { t: 40, r: 30, l: 60, b: 50 },
-      xaxis: {
-        title: '月份',
-        tickfont: { size: 12 },
-        gridcolor: '#f0f0f0'
-      },
-      yaxis: {
-        title: '库存金额（万）',
-        tickfont: { size: 12 },
-        gridcolor: '#f0f0f0'
-      },
+      margin: { t: 50, r: 30, l: 50, b: 30 },
       legend: {
         x: 0.02,
         y: 0.98,
         xanchor: 'left',
         yanchor: 'top',
-        bgcolor: 'rgba(255, 255, 255, 0.9)',
+        bgcolor: 'rgba(255, 255, 255, 0.95)',
         bordercolor: 'rgba(0, 0, 0, 0.1)',
         borderwidth: 1,
         font: { size: 12 }
-      },
-      plot_bgcolor: 'white',
-      paper_bgcolor: 'white',
-      hovermode: 'x unified'
+      }
     };
 
     Plotly.newPlot('chart4', [trace4a, trace4b, trace4c], layout4, config);
