@@ -13,11 +13,26 @@
     h2 {
       text-align: center;
       font-family: Arial, sans-serif;
+      margin-bottom: 40px;
+      margin-top: 30px;
+    }
+    .summary {
+      margin: 30px auto;
+      padding: 20px 25px;
+      max-width: 800px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <h2>月度数据趋势 (2024年1月 - 2025年2月)</h2>
+  <h2>月度库存金额趋势 (2024年1月 - 2025年2月)</h2>
+  <div class="summary">
+    <strong>数据概要：</strong> 2024年1月至2025年2月期间，总体数值呈现先降后升趋势（3,713万降至1,609万后回升至2,099万）。Toray的库存金额降幅最大（2,299万降至490万），但2025年初强劲反弹至1,099万，较2024下半年平均值（439万）增长150%。其他公司则相对稳定，2024下半年平均值为985万，2025年二月回到1,000万。
+  </div>
   <div id="chart1" class="chart-container"></div>
   <div id="chart2" class="chart-container"></div>
   <div id="chart3" class="chart-container"></div>
@@ -48,7 +63,7 @@
 
     const layout1 = {
       title: {
-        text: '总值趋势',
+        text: '库存金额趋势',
         font: { size: 14 }
       },
       margin: { t: 30 },
@@ -56,7 +71,7 @@
         title: '月份'
       },
       yaxis: {
-        title: '数值'
+        title: '库存金额（万）'
       },
       legend: {
         x: 0.95,
@@ -102,7 +117,7 @@
         title: '月份'
       },
       yaxis: {
-        title: '数值'
+        title: '库存金额（万）'
       },
       barmode: 'group',
       legend: {
@@ -165,7 +180,7 @@
         title: '月份'
       },
       yaxis: {
-        title: '数值'
+        title: '库存金额（万）'
       },
       legend: {
         x: 0.95,
