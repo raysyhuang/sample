@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Data Visualization</title>
+  <!-- Load Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    .chart-container {
+      height: 500px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h2>月度数据趋势 (2024年1月 - 2025年2月)</h2>
+  <div id="chart1" class="chart-container"></div>
+  <div id="chart2" class="chart-container"></div>
+  <div id="chart3" class="chart-container"></div>
+
+  <script>
+    // Data
+    const months = ["一月-24", "二月-24", "三月-24", "四月-24", "五月-24", "六月-24", "七月-24", 
+                    "八月-24", "九月-24", "十月-24", "十一月-24", "十二月-24", "一月-25", "二月-25"];
+    const totals = [3713, 3305, 3598, 2802, 2147, 1784, 1449, 1339, 1426, 1326, 1396, 1609, 1705, 2099];
+    const toray = [2299, 2083, 1939, 1199, 767, 608, 430, 434, 492, 352, 436, 490, 703, 1099];
+    const others = [1414, 1222, 1659, 1603, 1380, 1176, 1019, 905, 934, 974, 960, 1119, 1002, 1000];
+
+    // Chart 1: Total values line chart
+    const trace1 = {
+      x: months,
+      y: totals,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: '总计',
+      line: {
+        color: 'rgb(136, 132, 216)',
+        width: 3
+      },
+      marker: {
+        size: 8
+      }
+    };
+
+    const layout1 = {
+      title: {
+        text: '总值趋势',
+        font: { size: 14 }
+      },
+      margin: { t: 30 },
+      xaxis: {
+        title: '月份'
+      },
+      yaxis: {
+        title: '数值'
+      },
+      legend: {
+        x: 0.95,
+        y: 0.95,
+        xanchor: 'right',
+        yanchor: 'top',
+        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        bordercolor: 'rgba(0, 0, 0, 0.1)',
+        borderwidth: 1
+      }
+    };
+
+    Plotly.newPlot('chart1', [trace1], layout1, {responsive: true});
+
+    // Chart 2: Unstacked bar chart for Toray vs Others
+    const trace2a = {
+      x: months,
+      y: toray,
+      type: 'bar',
+      name: 'Toray',
+      marker: {
+        color: 'rgb(136, 132, 216)'
+      }
+    };
+
+    const trace2b = {
+      x: months,
+      y: others,
+      type: 'bar',
+      name: '其他',
+      marker: {
+        color: 'rgb(130, 202, 157)'
+      }
+    };
+
+    const layout2 = {
+      title: {
+        text: 'Toray 与 其他对比',
+        font: { size: 14 }
+      },
+      margin: { t: 30 },
+      xaxis: {
+        title: '月份'
+      },
+      yaxis: {
+        title: '数值'
+      },
+      barmode: 'group',
+      legend: {
+        x: 0.95,
+        y: 0.95,
+        xanchor: 'right',
+        yanchor: 'top',
+        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        bordercolor: 'rgba(0, 0, 0, 0.1)',
+        borderwidth: 1
+      }
+    };
+
+    Plotly.newPlot('chart2', [trace2a, trace2b], layout2, {responsive: true});
+
+    // Chart 3: Detailed comparison with multiple lines
+    const trace3a = {
+      x: months,
+      y: totals,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: '总计',
+      line: {
+        color: 'rgb(255, 115, 0)',
+        width: 3
+      }
+    };
+
+    const trace3b = {
+      x: months,
+      y: toray,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Toray',
+      line: {
+        color: 'rgb(136, 132, 216)',
+        width: 2
+      }
+    };
+
+    const trace3c = {
+      x: months,
+      y: others,
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: '其他',
+      line: {
+        color: 'rgb(130, 202, 157)',
+        width: 2
+      }
+    };
+
+    const layout3 = {
+      title: {
+        text: '详细比较',
+        font: { size: 14 }
+      },
+      margin: { t: 30 },
+      xaxis: {
+        title: '月份'
+      },
+      yaxis: {
+        title: '数值'
+      },
+      legend: {
+        x: 0.95,
+        y: 0.95,
+        xanchor: 'right',
+        yanchor: 'top',
+        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        bordercolor: 'rgba(0, 0, 0, 0.1)',
+        borderwidth: 1
+      }
+    };
+
+    Plotly.newPlot('chart3', [trace3a, trace3b, trace3c], layout3, {responsive: true});
+  </script>
+</body>
+</html>
