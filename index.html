@@ -2,40 +2,128 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monthly Data Visualization</title>
   <!-- Load Plotly.js -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f8f9fa;
+      color: #2c3e50;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
     .chart-container {
       height: 500px;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
     }
+
+    .chart-container:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
     h2 {
       text-align: center;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       margin-bottom: 40px;
       margin-top: 30px;
+      color: #1a73e8;
+      font-size: 2em;
+      font-weight: 600;
     }
+
     .summary {
-      margin: 30px auto;
-      padding: 20px 25px;
+      margin: 40px auto;
+      padding: 25px 35px;
       max-width: 800px;
-      background-color: #f5f5f5;
-      border-radius: 5px;
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      background: linear-gradient(to right bottom, #ffffff, #f8f9fa);
+      border-radius: 12px;
+      line-height: 1.8;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .summary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .summary strong {
+      color: #1a73e8;
+      font-size: 1.1em;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 0 10px;
+      }
+
+      .chart-container {
+        height: 400px;
+        margin-bottom: 30px;
+        padding: 10px;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        margin: 20px 0;
+      }
+
+      .summary {
+        padding: 20px;
+        margin: 20px auto;
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chart-container {
+        height: 300px;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
     }
   </style>
 </head>
 <body>
-  <h2>月度库存金额趋势 (2024年1月 - 2025年2月)</h2>
-  <div class="summary">
-    <strong>数据概要：</strong> 2024年1月至2025年2月期间，总体数值呈现先降后升趋势（3,713万降至1,609万后回升至2,099万）。Toray的库存金额降幅最大（2,299万降至490万），但2025年初强劲反弹至1,099万，较2024下半年平均值（439万）增长150%。其他公司则相对稳定，2024下半年平均值为985万，2025年二月回到1,000万。
+  <div class="container">
+    <h2>月度库存金额趋势 (2024年1月 - 2025年2月)</h2>
+    <div class="summary">
+      <strong>数据概要：</strong> 2024年1月至2025年2月期间，总体数值呈现先降后升趋势（3,713万降至1,609万后回升至2,099万）。Toray的库存金额降幅最大（2,299万降至490万），但2025年初强劲反弹至1,099万，较2024下半年平均值（439万）增长150%。其他公司则相对稳定，2024下半年平均值为985万，2025年二月回到1,000万。
+    </div>
+    <div id="chart1" class="chart-container"></div>
+    <div id="chart2" class="chart-container"></div>
+    <div id="chart3" class="chart-container"></div>
+    <div id="chart4" class="chart-container"></div>
   </div>
-  <div id="chart1" class="chart-container"></div>
-  <div id="chart2" class="chart-container"></div>
-  <div id="chart3" class="chart-container"></div>
 
   <script>
     // Data
@@ -53,147 +141,245 @@
       mode: 'lines+markers',
       name: '总计',
       line: {
-        color: 'rgb(136, 132, 216)',
-        width: 3
+        color: '#1a73e8',
+        width: 3,
+        shape: 'spline'
       },
       marker: {
-        size: 8
+        size: 8,
+        color: '#1a73e8',
+        line: {
+          color: '#ffffff',
+          width: 2
+        }
       }
     };
 
     const layout1 = {
       title: {
         text: '库存金额趋势',
-        font: { size: 14 }
+        font: { 
+          size: 18,
+          color: '#2c3e50',
+          family: "'Segoe UI', Arial, sans-serif"
+        }
       },
-      margin: { t: 30 },
+      margin: { t: 40, r: 20, l: 50, b: 30 },
       xaxis: {
-        title: '月份'
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
       },
       yaxis: {
-        title: '库存金额（万）'
+        title: '库存金额（万）',
+        titlefont: { size: 11 },
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
       },
       legend: {
-        x: 0.95,
-        y: 0.95,
-        xanchor: 'right',
+        x: 0.02,
+        y: 0.98,
+        xanchor: 'left',
         yanchor: 'top',
-        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        bgcolor: 'rgba(255, 255, 255, 0.9)',
         bordercolor: 'rgba(0, 0, 0, 0.1)',
-        borderwidth: 1
-      }
+        borderwidth: 1,
+        font: { size: 11 }
+      },
+      plot_bgcolor: 'white',
+      paper_bgcolor: 'white',
+      hovermode: 'x unified'
     };
 
-    Plotly.newPlot('chart1', [trace1], layout1, {responsive: true});
+    const config = {
+      responsive: true,
+      displayModeBar: false,
+      scrollZoom: false
+    };
 
-    // Chart 2: Unstacked bar chart for Toray vs Others
+    Plotly.newPlot('chart1', [trace1], layout1, config);
+
+    // Chart 2: Bar chart for Toray
     const trace2a = {
       x: months,
       y: toray,
       type: 'bar',
       name: 'Toray',
       marker: {
-        color: 'rgb(136, 132, 216)'
+        color: '#1a73e8',
+        opacity: 0.8
       }
     };
 
+    const layout2 = {
+      title: {
+        text: 'Toray 库存金额',
+        font: { 
+          size: 18,
+          color: '#2c3e50',
+          family: "'Segoe UI', Arial, sans-serif"
+        }
+      },
+      margin: { t: 40, r: 20, l: 50, b: 30 },
+      xaxis: {
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
+      },
+      yaxis: {
+        title: '库存金额（万）',
+        titlefont: { size: 11 },
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
+      },
+      bargap: 0.3,
+      showlegend: false,
+      plot_bgcolor: 'white',
+      paper_bgcolor: 'white',
+      hovermode: 'x unified'
+    };
+
+    Plotly.newPlot('chart2', [trace2a], layout2, config);
+
+    // Chart 2b: Bar chart for Others
     const trace2b = {
       x: months,
       y: others,
       type: 'bar',
       name: '其他',
       marker: {
-        color: 'rgb(130, 202, 157)'
+        color: '#34a853',
+        opacity: 0.8
       }
     };
 
-    const layout2 = {
+    const layout2b = {
       title: {
-        text: 'Toray 与 其他对比',
-        font: { size: 14 }
+        text: '其他公司库存金额',
+        font: { 
+          size: 18,
+          color: '#2c3e50',
+          family: "'Segoe UI', Arial, sans-serif"
+        }
       },
-      margin: { t: 30 },
+      margin: { t: 40, r: 20, l: 50, b: 30 },
       xaxis: {
-        title: '月份'
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
       },
       yaxis: {
-        title: '库存金额（万）'
+        title: '库存金额（万）',
+        titlefont: { size: 11 },
+        tickfont: { size: 11 },
+        gridcolor: '#f0f0f0'
       },
-      barmode: 'group',
-      legend: {
-        x: 0.95,
-        y: 0.95,
-        xanchor: 'right',
-        yanchor: 'top',
-        bgcolor: 'rgba(255, 255, 255, 0.7)',
-        bordercolor: 'rgba(0, 0, 0, 0.1)',
-        borderwidth: 1
-      }
+      bargap: 0.3,
+      showlegend: false,
+      plot_bgcolor: 'white',
+      paper_bgcolor: 'white',
+      hovermode: 'x unified'
     };
 
-    Plotly.newPlot('chart2', [trace2a, trace2b], layout2, {responsive: true});
+    Plotly.newPlot('chart3', [trace2b], layout2b, config);
 
-    // Chart 3: Detailed comparison with multiple lines
-    const trace3a = {
+    // Chart 4: Detailed comparison with multiple lines
+    const trace4a = {
       x: months,
       y: totals,
       type: 'scatter',
       mode: 'lines+markers',
       name: '总计',
       line: {
-        color: 'rgb(255, 115, 0)',
-        width: 3
+        color: '#ea4335',
+        width: 3,
+        shape: 'spline'
+      },
+      marker: {
+        size: 8,
+        color: '#ea4335',
+        line: {
+          color: '#ffffff',
+          width: 2
+        }
       }
     };
 
-    const trace3b = {
+    const trace4b = {
       x: months,
       y: toray,
       type: 'scatter',
       mode: 'lines+markers',
       name: 'Toray',
       line: {
-        color: 'rgb(136, 132, 216)',
-        width: 2
+        color: '#1a73e8',
+        width: 2,
+        shape: 'spline'
+      },
+      marker: {
+        size: 6,
+        color: '#1a73e8',
+        line: {
+          color: '#ffffff',
+          width: 2
+        }
       }
     };
 
-    const trace3c = {
+    const trace4c = {
       x: months,
       y: others,
       type: 'scatter',
       mode: 'lines+markers',
       name: '其他',
       line: {
-        color: 'rgb(130, 202, 157)',
-        width: 2
+        color: '#34a853',
+        width: 2,
+        shape: 'spline'
+      },
+      marker: {
+        size: 6,
+        color: '#34a853',
+        line: {
+          color: '#ffffff',
+          width: 2
+        }
       }
     };
 
-    const layout3 = {
+    const layout4 = {
       title: {
-        text: '详细比较',
-        font: { size: 14 }
+        text: '详细对比趋势',
+        font: { 
+          size: 18,
+          color: '#2c3e50',
+          family: "'Segoe UI', Arial, sans-serif"
+        }
       },
-      margin: { t: 30 },
+      margin: { t: 40, r: 30, l: 60, b: 50 },
       xaxis: {
-        title: '月份'
+        title: '月份',
+        tickfont: { size: 12 },
+        gridcolor: '#f0f0f0'
       },
       yaxis: {
-        title: '库存金额（万）'
+        title: '库存金额（万）',
+        tickfont: { size: 12 },
+        gridcolor: '#f0f0f0'
       },
       legend: {
-        x: 0.95,
-        y: 0.95,
-        xanchor: 'right',
+        x: 0.02,
+        y: 0.98,
+        xanchor: 'left',
         yanchor: 'top',
-        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        bgcolor: 'rgba(255, 255, 255, 0.9)',
         bordercolor: 'rgba(0, 0, 0, 0.1)',
-        borderwidth: 1
-      }
+        borderwidth: 1,
+        font: { size: 12 }
+      },
+      plot_bgcolor: 'white',
+      paper_bgcolor: 'white',
+      hovermode: 'x unified'
     };
 
-    Plotly.newPlot('chart3', [trace3a, trace3b, trace3c], layout3, {responsive: true});
+    Plotly.newPlot('chart4', [trace4a, trace4b, trace4c], layout4, config);
   </script>
 </body>
 </html>
